@@ -74,22 +74,42 @@ function makeDrink(drink: string, customerDiv: HTMLDivElement) {
 }
 
 function processOrder(customerNumber: number, drink: string, ordersDiv: HTMLDivElement) {
-    
     const customerDiv = document.createElement('div');
     customerDiv.classList.add('customer');
     ordersDiv.appendChild(customerDiv);
 
-    order(customerNumber, customerDiv)
-    .then(() => pay(customerDiv))
-    .then(() => makeBurger(customerDiv))
-    .then(() => makeFries(customerDiv))
-    .then(() => makeDrink(drink, customerDiv))
-    .then(() => {
-        customerDiv.innerHTML += '<p>✅ Bestellung abgeschlossen.</p>';
-    })
-    .catch((error) => console.log(error));
-    
+    const orderSteps = [
+        order(customerNumber, customerDiv),
+        pay(customerDiv),
+        makeBurger(customerDiv),
+        makeFries(customerDiv),
+        makeDrink(drink, customerDiv)
+    ];
+
+    Promise.all(orderSteps)
+        .then(() => {
+            customerDiv.innerHTML += '<p>✅ Bestellung abgeschlossen.</p>';
+        })
+        .catch((error) => console.log(error));
 }
+
+// function processOrder(customerNumber: number, drink: string, ordersDiv: HTMLDivElement) {
+    
+//     const customerDiv = document.createElement('div');
+//     customerDiv.classList.add('customer');
+//     ordersDiv.appendChild(customerDiv);
+
+//     order(customerNumber, customerDiv)
+//     .then(() => pay(customerDiv))
+//     .then(() => makeBurger(customerDiv))
+//     .then(() => makeFries(customerDiv))
+//     .then(() => makeDrink(drink, customerDiv))
+//     .then(() => {
+//         customerDiv.innerHTML += '<p>✅ Bestellung abgeschlossen.</p>';
+//     })
+//     .catch((error) => console.log(error));
+    
+// }
 
 function getRandomDurationInMilliseconds(): number {
     const min = 2000;
